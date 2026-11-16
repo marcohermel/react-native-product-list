@@ -29,5 +29,14 @@ export const styles = StyleSheet.create({
         fontFamily: 'Poppins-Bold',
         color: '#FFFFFF',
         marginLeft: 10,
-    }
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+    },
+    backButtonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        fontFamily: 'Poppins-Bold',
+        color: '#FFFFFF',
+    },
 })

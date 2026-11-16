@@ -27,10 +27,11 @@ export default function Header({ disabledBackButton }: HeaderProps) {
                                     ios: 'chevron.backward',
                                     android: import('@expo/material-symbols/arrow_back.xml'),
                                 })}
-                                size={24}
+                                size={18}
                                 color="white"
                             />
                         </Host>
+                        <Text style={styles.backButtonText}>Voltar</Text>
                     </TouchableOpacity>
                 )}
                 <Text style={styles.title}>My App</Text>
