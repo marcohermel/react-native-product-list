@@ -5,19 +5,19 @@ import Header from '../components/header';
 import { styles } from './styles';
 import axios from 'axios';
 import type { StaticScreenProps } from '@react-navigation/native';
+import type { ProductType } from '../types';
 
-type Props = StaticScreenProps<{ productId: string }>;
+type Props = StaticScreenProps<{ productId: number }>;
 
 export const DetailsScreen = ({ route }: Props) => {
   const { productId } = route.params;
-  const [productDetails, setProductDetails] = React.useState<any>(null);
+  const [productDetails, setProductDetails] = React.useState<ProductType | null>(null);
   const { width } = useWindowDimensions();
 
-  const getProductDetails = async (id: string) => {
+  const getProductDetails = async (id: number): Promise<ProductType | null> => {
     try {
-      const response = await axios.get(`https://api-produtos-unyleya.vercel.app/produtos/${id}`);
-      const data = await response.data;
-      return data;
+      const response = await axios.get<ProductType>(`https://dummyjson.com/products/${id}`);
+      return response.data;
     } catch (error) {
       console.error('Erro ao buscar detalhes do produto:', error);
       return null;
@@ -39,14 +39,14 @@ export const DetailsScreen = ({ route }: Props) => {
       <View>
         <Header />
         <View style={styles.container}>
-          <Text style={styles.title}>{productDetails?.nome}</Text>
+          <Text style={styles.title}>{productDetails?.title}</Text>
           <Text style={styles.subtitle}>Details Screen</Text>
-          <Image source={{ uri: productDetails?.url_imagem }} style={styles.image} />
-          <Text style={styles.price}>R$ {productDetails?.preco}</Text>
-          {productDetails?.descricao ? (
+          <Image source={{ uri: productDetails?.images[0] }} style={styles.image} />
+          <Text style={styles.price}>US$ {productDetails?.price}</Text>
+          {productDetails?.description ? (
             <RenderHtml
               contentWidth={width - 32}
-              source={{ html: productDetails.descricao }}
+              source={{ html: productDetails.description }}
               baseStyle={styles.subtitle}
             />
           ) : null}

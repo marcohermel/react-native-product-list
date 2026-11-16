@@ -2,7 +2,7 @@ import react, { useEffect, useState } from 'react';
 import { FlatList, View } from 'react-native';;
 import Header from '../components/header';
 import axios from 'axios';
-import { type ProductType } from '../types';
+import type { ProductType } from '../types';
 import Product from '../components/product';
 
 
@@ -11,8 +11,8 @@ export const HomeScreen = () => {
 
   const getProdutos = async (): Promise<ProductType[]> => {
     try {
-      const response = await axios.get('https://api-produtos-unyleya.vercel.app/produtos');
-      return response.data;
+      const response = await axios.get<{ products: ProductType[] }>('https://dummyjson.com/products');
+      return response.data.products;
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
       return [];
@@ -35,7 +35,7 @@ export const HomeScreen = () => {
         <FlatList
           data={produtos}
           renderItem={({ item }) => <Product product={item} />}
-          keyExtractor={(item) => item._id.toString()}
+          keyExtractor={(item) => item.id.toString()}
           numColumns={2}
         />
       </View>
