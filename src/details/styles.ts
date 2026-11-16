@@ -4,6 +4,8 @@ export const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 16,
+    paddingBottom: 50,
   },
   title: {
     fontSize: 24,

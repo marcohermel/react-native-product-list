@@ -1,48 +1,58 @@
 import * as React from 'react';
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { Text, View, Image, ScrollView, useWindowDimensions } from "react-native";
+import RenderHtml from 'react-native-render-html';
 import Header from '../components/header';
 import { styles } from './styles';
-import { Host, Icon } from '@expo/ui';
+import axios from 'axios';
+import type { StaticScreenProps } from '@react-navigation/native';
 
-export const DetailsScreen = ({ productId }: { productId: number }) => {
+type Props = StaticScreenProps<{ productId: string }>;
+
+export const DetailsScreen = ({ route }: Props) => {
+  const { productId } = route.params;
+  const [productDetails, setProductDetails] = React.useState<any>(null);
+  const { width } = useWindowDimensions();
+
+  const getProductDetails = async (id: string) => {
+    try {
+      const response = await axios.get(`https://api-produtos-unyleya.vercel.app/produtos/${id}`);
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      console.error('Erro ao buscar detalhes do produto:', error);
+      return null;
+    }
+  };
+
+  React.useEffect(() => {
+    const fetchProductDetails = async () => {
+      const details = await getProductDetails(productId);
+      setProductDetails(details);
+    };
+
+    fetchProductDetails();
+  }, [productId]);
+
 
   return (
-    <View>
-      <Header />
-      <View style={styles.container}>
-        <Text style={styles.title}>Alexa</Text>
-        <Text style={styles.subtitle}>Details Screen</Text>
-        <Image source={{ uri: 'https://dummyjson.com/image/150' }} style={styles.image} />
-        <Text style={styles.price}>$199.99</Text>
-        <Text style={styles.subtitle}>k is a detailed description of the product. It provides all the necessary information that a user might want to know before making a purchase.</Text>
-        <View style={{ gap: 30, flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity onPress={() => console.log('Star pressed')}>
-            <Host matchContents >
-              <Icon
-                name={Icon.select({
-                  ios: 'pencil.circle',
-                  android: import('@expo/material-symbols/edit.xml'),
-                })}
-                size={32}
-                color="blue"
-              />
-            </Host>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => console.log('Hexagon pressed')}>
-            <Host matchContents >
-              <Icon
-                name={Icon.select({
-                  ios: 'trash.circle',
-                  android: import('@expo/material-symbols/delete.xml'),
-                })}
-                size={32}
-                color="green"
-              />
-            </Host>
-          </TouchableOpacity>
+    <ScrollView>
+      <View>
+        <Header />
+        <View style={styles.container}>
+          <Text style={styles.title}>{productDetails?.nome}</Text>
+          <Text style={styles.subtitle}>Details Screen</Text>
+          <Image source={{ uri: productDetails?.url_imagem }} style={styles.image} />
+          <Text style={styles.price}>R$ {productDetails?.preco}</Text>
+          {productDetails?.descricao ? (
+            <RenderHtml
+              contentWidth={width - 32}
+              source={{ html: productDetails.descricao }}
+              baseStyle={styles.subtitle}
+            />
+          ) : null}
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

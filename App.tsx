@@ -1,10 +1,6 @@
-import * as React from 'react';
-import { Text, View } from 'react-native';
 import {
   createStaticNavigation,
-  useNavigation,
 } from '@react-navigation/native';
-import { Button } from '@react-navigation/elements';
 import {
   createStackNavigator,
   createStackScreen,

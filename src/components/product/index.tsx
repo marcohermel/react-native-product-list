@@ -7,17 +7,18 @@ export default function Product({ product }: { product: ProductType }) {
     const navigation = useNavigation();
 
   const navegar = () => {
-    navigation.navigate('Details'); 
+    console.log('Navigating to Details screen with productId:', product._id);
+    navigation.navigate('Details', { productId: product._id }); 
   };
 
   return (
       <View style={styles.container}>
         <TouchableOpacity onPress={navegar}>
           <View style={styles.content}>
-            <Image source={{ uri: 'https://dummyjson.com/image/150' }} style={styles.image}   />
-            <Text style={styles.title}>{product.title}</Text>
-            <Text numberOfLines={2} style={styles.description}>{product.description}</Text>
-            <Text style={styles.price}>R$ {product.price.toFixed(2)}</Text>
+            <Image source={{ uri: product.url_imagem }} style={styles.image}   />
+            <Text style={styles.title}>{product.nome}</Text>
+            <Text numberOfLines={2} style={styles.description}>{product.descricao}</Text>
+            <Text style={styles.price}>R$ {product.preco}</Text>
           </View>
         </TouchableOpacity>
       </View>
